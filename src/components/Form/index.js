@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Vibration,
+} from "react-native";
 import ResultImc from "./ResultImc/";
 import styles from "./style";
 
@@ -7,12 +13,20 @@ export default function Title() {
   const [height, setHeight] = useState(null),
     [weight, setWeight] = useState(null),
     [imc, setImc] = useState(null),
-    [messageImc, setMessageImc] = useState("Preencha o peso e altura");
-  [textButton, setTextButton] = useState("Calcular IMC");
+    [messageImc, setMessageImc] = useState(""),
+    [textButton, setTextButton] = useState("Calcular IMC"),
+    [errorMessage, setErrorMessage] = useState("");
 
   function imcCalculator() {
     const calculatedImc = Number((weight / (height * height)).toFixed(2));
     setImc(calculatedImc);
+  }
+
+  function verificationImc() {
+    if (!imc) {
+      Vibration.vibrate();
+      setErrorMessage("*campo obrigatório");
+    }
   }
 
   function validationImc() {
@@ -22,10 +36,13 @@ export default function Title() {
       setWeight(null);
       setMessageImc("Seu IMC é:");
       setTextButton("Calcular novamente");
+      setErrorMessage("");
     } else {
+      verificationImc();
       setImc(null);
       setTextButton("Calcular IMC");
       setMessageImc("Preencha o peso e altura");
+      Vibration.vibrate();
     }
   }
 
@@ -33,6 +50,7 @@ export default function Title() {
     <View style={styles.formContent}>
       <View style={styles.form}>
         <Text style={styles.formLabel}>Altura</Text>
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
         <TextInput
           style={styles.input}
           value={height}
@@ -41,6 +59,8 @@ export default function Title() {
           keyboardType="numeric"
         />
         <Text style={styles.formLabel}>Peso</Text>
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
+
         <TextInput
           style={styles.input}
           value={weight}
