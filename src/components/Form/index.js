@@ -7,6 +7,7 @@ import {
   Vibration,
   Pressable,
   Keyboard,
+  FlatList,
 } from "react-native";
 import ResultImc from "./ResultImc/";
 import styles from "./style";
@@ -18,6 +19,7 @@ export default function Title() {
     [messageImc, setMessageImc] = useState(""),
     [textButton, setTextButton] = useState("Calcular IMC"),
     [errorMessage, setErrorMessage] = useState("");
+  [imcList, setImcList] = useState([]);
 
   function imcCalculator() {
     let heightFormat = height.replace(",", ".");
@@ -25,6 +27,10 @@ export default function Title() {
     const calculatedImc = Number(
       (weightFormat / (heightFormat * heightFormat)).toFixed(2)
     );
+    setImcList((item) => [
+      ...item,
+      { id: new Date().getTime(), imc: calculatedImc },
+    ]);
     setImc(calculatedImc);
   }
 
@@ -53,7 +59,7 @@ export default function Title() {
   }
 
   return (
-    <View>
+    <View style={{ marginBottom: "20" }}>
       {!imc ? (
         <View>
           <Pressable onPress={Keyboard.dismiss} style={styles.formContent}>
@@ -87,7 +93,7 @@ export default function Title() {
           </Pressable>
         </View>
       ) : (
-        <View>
+        <View style={styles.resultImc}>
           <ResultImc resultImc={imc} messageResultImc={messageImc} />
           <TouchableOpacity
             style={styles.buttonCalculator}
@@ -95,6 +101,20 @@ export default function Title() {
           >
             <Text style={styles.textButtonCalculator}>{textButton}</Text>
           </TouchableOpacity>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={styles.listImc}
+            data={imcList.reverse()}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => {
+              return (
+                <Text style={styles.resultImcItem}>
+                  <Text style={styles.resultImcText}>Resultado IMC = </Text>
+                  {item.imc}
+                </Text>
+              );
+            }}
+          ></FlatList>
         </View>
       )}
     </View>

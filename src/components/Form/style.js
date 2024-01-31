@@ -45,5 +45,19 @@ const styles = StyleSheet.create({
     color: "#B22222",
     paddingLeft: 20,
   },
+  resultImc: {
+    height: "100%",
+    alignItems: "center",
+  },
+  resultImcItem: {
+    textAlign: "center",
+    fontSize: 28,
+    color: "#B22222",
+    fontWeight: "bold",
+  },
+  resultImcText: {
+    fontSize: 20,
+    fontWeight: "normal",
+  },
 });
 export default styles;
