@@ -59,7 +59,7 @@ export default function Title() {
   }
 
   return (
-    <View style={{ marginBottom: "20" }}>
+    <View style={{ marginBottom: 20 }}>
       {!imc ? (
         <View>
           <Pressable onPress={Keyboard.dismiss} style={styles.formContent}>
